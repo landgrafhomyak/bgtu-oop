@@ -1,7 +1,7 @@
 package ru.landgrafhomyak.studying.bgtu.oop.expressions
 
-class ParameterOperand(private val value: Double) : Expression<ExpressionContext> {
-    override fun calculate(ctx: ExpressionContext): Double {
-        return this.value
+public class ParameterOperand(private val parameterName: String) : Expression<ExpressionContextWithParameters> {
+    override fun calculate(ctx: ExpressionContextWithParameters): Double {
+        return ctx.getParameter(this.parameterName)
     }
 }

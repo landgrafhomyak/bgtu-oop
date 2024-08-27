@@ -10,13 +10,20 @@ repositories {
 }
 
 kotlin {
+    explicitApi()
     jvm()
-    js(IR) {
-        browser{
+    js("browser", IR) {
+        browser {
             webpackTask {
                 outputs.upToDateWhen { false }
             }
         }
         binaries.executable()
+    }
+
+    sourceSets {
+        val browserMain by getting {
+            resources.srcDir(projectDir.resolve("./src/browserMain/static"))
+        }
     }
 }
