@@ -26,6 +26,14 @@ svg#canvas {
     height: 100%;
 }
 
+svg#canvas > polyline.plot {
+    stroke: black;
+    stroke-width: 1%;
+    fill: none;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
 table.control-panel > tbody > tr > td.button {
     border: 1px solid black;
     background: #eee;

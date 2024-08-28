@@ -46,7 +46,7 @@ public class Application(
         @Suppress("DuplicatedCode")
         override fun configure(builder: CanvasConfiguration) {
             builder.setXRange(this@Application.state.xCenter - this@Application.state.xRadius, this@Application.state.xCenter + this@Application.state.xRadius)
-            builder.setXRange(this@Application.state.yCenter - this@Application.state.yRadius, this@Application.state.yCenter + this@Application.state.yRadius)
+            builder.setYRange(this@Application.state.yCenter - this@Application.state.yRadius, this@Application.state.yCenter + this@Application.state.yRadius)
         }
     }
 
@@ -54,7 +54,7 @@ public class Application(
         @Suppress("DuplicatedCode")
         override fun configure(builder: CanvasConfiguration) {
             builder.setXRange(this@Application.state.xCenter - this@Application.state.xRadius, this@Application.state.xCenter + this@Application.state.xRadius)
-            builder.setXRange(this@Application.state.yCenter - this@Application.state.yRadius, this@Application.state.yCenter + this@Application.state.yRadius)
+            builder.setYRange(this@Application.state.yCenter - this@Application.state.yRadius, this@Application.state.yCenter + this@Application.state.yRadius)
             builder.addLine(this@Application.lineDrawer)
         }
     }

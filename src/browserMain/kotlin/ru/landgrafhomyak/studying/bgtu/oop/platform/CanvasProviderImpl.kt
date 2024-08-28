@@ -36,21 +36,17 @@ public class CanvasProviderImpl(
             val points = arrayListOf<Pair<Double, Double>>()
             generator.draw(LinePlot(points))
             if (points.isNotEmpty()) {
-                val path = document.createElementNS("http://www.w3.org/2000/svg", "path")
-                val d = buildString {
-                    append("M ${points[0].first} ${points[0].second} ")
-                    for (e in points.drop(1))
-                        append("L ${e.first} ${e.second} ")
-                }
-                path.setAttribute("d", d)
+                val path = document.createElementNS("http://www.w3.org/2000/svg", "polyline")
+                path.setAttribute("points", points.joinToString(separator = " ") { (x, y) -> "$x,$y" })
+                path.classList.add("plot")
                 this@CanvasProviderImpl.canvas.append(path)
             }
         }
     }
 
-    private class LinePlot(private val dst: MutableList<Pair<Double, Double>>) : Plot {
+    private inner class LinePlot(private val dst: MutableList<Pair<Double, Double>>) : Plot {
         override fun drawTo(x: Double, y: Double) {
-            this.dst.add(Pair(x, y))
+            this.dst.add(Pair(x, -(y - this@CanvasProviderImpl.vbY) + this@CanvasProviderImpl.vbY + this@CanvasProviderImpl.vbH))
         }
     }
 }
