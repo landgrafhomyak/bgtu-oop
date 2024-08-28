@@ -4,7 +4,7 @@ import kotlin.math.pow
 import ru.landgrafhomyak.studying.bgtu.oop.expressions.Expression
 import ru.landgrafhomyak.studying.bgtu.oop.expressions.ExpressionContext
 
-class PowExpression<C : ExpressionContext>(
+public class PowExpression<C : ExpressionContext>(
     private val operand: Expression<C>,
     private val power: Expression<C>,
 ) : Expression<C> {

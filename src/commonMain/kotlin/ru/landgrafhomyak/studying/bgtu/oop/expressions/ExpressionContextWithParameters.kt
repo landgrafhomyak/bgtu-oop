@@ -1,8 +1,8 @@
 package ru.landgrafhomyak.studying.bgtu.oop.expressions
 
-interface ExpressionContextWithParameters : ExpressionContext {
-    class ParameterNotFoundException(@Suppress("MemberVisibilityCanBePrivate") val parameterName: String) : RuntimeException("Variable not found: $parameterName")
+public interface ExpressionContextWithParameters : ExpressionContext {
+    public class ParameterNotFoundException(@Suppress("MemberVisibilityCanBePrivate") public val parameterName: String) : RuntimeException("Variable not found: $parameterName")
 
     @Throws(ParameterNotFoundException::class)
-    fun getParameter(name: String): Double
+    public fun getParameter(name: String): Double
 }

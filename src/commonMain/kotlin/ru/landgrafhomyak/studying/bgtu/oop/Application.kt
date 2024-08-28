@@ -15,7 +15,7 @@ import ru.landgrafhomyak.studying.bgtu.oop.ui.Plot
 public class Application(
     private val canvas: CanvasProvider,
     private val parser: Parser<ExpressionContextWithParameters>,
-    private val drawingStep: Double = 0.01,
+    private val drawingStep: Double = 100.0,
     initialViewArea: Inputs.ViewArea = Inputs.ViewArea.DEFAULT,
     private val scrollAndZoomSettings: Inputs.ScrollAndZoomSettings = Inputs.ScrollAndZoomSettings.DEFAULT,
 ) {
@@ -62,7 +62,7 @@ public class Application(
     private inner class LineDrawerImpl : CanvasConfiguration.LineDrawer {
         override fun draw(plt: Plot) {
             val step = this@Application.state.xRadius * 2 / this@Application.drawingStep
-            var x    = this@Application.state.xCenter - this@Application.state.xRadius
+            var x = this@Application.state.xCenter - this@Application.state.xRadius
             val xEnd = this@Application.state.xCenter + this@Application.state.xRadius
 
             while (x <= xEnd) {

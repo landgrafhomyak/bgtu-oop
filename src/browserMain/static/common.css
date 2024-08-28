@@ -1,0 +1,57 @@
+div.app-root {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+}
+
+table.control-panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    width: 100%;
+    border-collapse: separate;
+    box-sizing: content-box;
+}
+
+table.control-panel > tbody > tr > td {
+    box-sizing: content-box;
+}
+
+svg#canvas {
+    border: 1px solid grey;
+    width: 100%;
+    height: 100%;
+}
+
+table.control-panel > tbody > tr > td.button {
+    border: 1px solid black;
+    background: #eee;
+    font-weight: bold;
+    width: 1.5em;
+    height: 1.5em;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input#expression {
+    border: 1px solid black;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+table.control-panel > tbody > tr > td.params-container {
+    width: 30%;
+    vertical-align: top;
+    overflow-y: visible;
+    height: 60%;
+}
+
+table.control-panel > tbody > tr > td.params-container > table {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}

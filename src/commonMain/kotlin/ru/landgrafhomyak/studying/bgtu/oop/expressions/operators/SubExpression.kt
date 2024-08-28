@@ -3,7 +3,7 @@ package ru.landgrafhomyak.studying.bgtu.oop.expressions.operators
 import ru.landgrafhomyak.studying.bgtu.oop.expressions.Expression
 import ru.landgrafhomyak.studying.bgtu.oop.expressions.ExpressionContext
 
-class SubExpression<C : ExpressionContext>(
+public class SubExpression<C : ExpressionContext>(
     private val leftOperand: Expression<C>,
     private val rightOperand: Expression<C>,
 ) : Expression<C> {

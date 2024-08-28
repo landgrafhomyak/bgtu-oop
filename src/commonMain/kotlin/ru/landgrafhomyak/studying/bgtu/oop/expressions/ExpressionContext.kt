@@ -1,3 +1,3 @@
 package ru.landgrafhomyak.studying.bgtu.oop.expressions
 
-interface ExpressionContext
+public interface ExpressionContext

@@ -14,6 +14,9 @@ kotlin {
     jvm()
     js("browser", IR) {
         browser {
+            commonWebpackConfig{
+                outputFileName = "app.js"
+            }
             webpackTask {
                 outputs.upToDateWhen { false }
             }

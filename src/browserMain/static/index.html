@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello world</title>
+    <link rel="stylesheet" href="./common.css">
+</head>
+<body>
+<div class="app-root">
+    <table class="control-panel">
+        <tr>
+            <td colspan="2"></td>
+            <td class="button" id="zoom-x+">+</td>
+            <td colspan="1"></td>
+            <td colspan="3">
+                <input id="expression">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td class="button" id="scroll-x+">^</td>
+            <td colspan="3"></td>
+            <td rowspan="5" class="params-container">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td colspan="2">params</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="button" id="zoom-y-">-</td>
+            <td class="button" id="scroll-y-">&lt;</td>
+            <td></td>
+            <td class="button" id="scroll-y+">&gt;</td>
+            <td class="button" id="zoom-y+">+</td>
+            <td colspan="1"></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td class="button" id="scroll-x-">v</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td class="button" id="zoom-x-">-</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6"></td>
+        </tr>
+    </table>
+    <svg id="canvas"></svg>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
