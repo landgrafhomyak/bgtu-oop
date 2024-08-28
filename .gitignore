@@ -4,5 +4,7 @@
 build/
 /gradlew*
 /.kotlin
+/kotlin-js-store
 
 *.class
+*.js

@@ -22,7 +22,10 @@ public fun main() {
     document.getElementById("scroll-x-")!!.addEventListener("click", { app.callbacks.scrollX(-1) })
     document.getElementById("scroll-y+")!!.addEventListener("click", { app.callbacks.scrollY(1) })
     document.getElementById("scroll-y-")!!.addEventListener("click", { app.callbacks.scrollY(-1) })
+
     val input = document.getElementById("expression")!! as HTMLInputElement
     input.addEventListener("change", { app.callbacks.inputExpression(input.value) })
 
+    val params = ParamsController(app.callbacks, document.getElementById("params-container")!! as HTMLElement)
+    document.getElementById("add-param")!!.addEventListener("click", { params.addParamCallback() })
 }

@@ -34,7 +34,7 @@ svg#canvas > polyline.plot {
     stroke-linecap: round;
 }
 
-table.control-panel > tbody > tr > td.button {
+td.button {
     border: 1px solid black;
     background: #eee;
     font-weight: bold;
@@ -45,10 +45,15 @@ table.control-panel > tbody > tr > td.button {
     cursor: pointer;
 }
 
-input#expression {
+input {
     border: 1px solid black;
     width: 100%;
     box-sizing: border-box;
+}
+
+
+input.error {
+    border-color: red;
 }
 
 table.control-panel > tbody > tr > td.params-container {
