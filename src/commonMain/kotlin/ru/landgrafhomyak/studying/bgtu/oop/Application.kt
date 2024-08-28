@@ -137,12 +137,12 @@ public class Application(
         }
 
         override fun zoomX(steps: Int) {
-            this@Application.state.xRadius *= this@Application.scrollAndZoomSettings.xZoomStep.pow(steps)
+            this@Application.state.xRadius /= this@Application.scrollAndZoomSettings.xZoomStep.pow(steps)
             this@Application.redraw()
         }
 
         override fun zoomY(steps: Int) {
-            this@Application.state.yRadius *= this@Application.scrollAndZoomSettings.yZoomStep.pow(steps)
+            this@Application.state.yRadius /= this@Application.scrollAndZoomSettings.yZoomStep.pow(steps)
             this@Application.redraw()
         }
 
