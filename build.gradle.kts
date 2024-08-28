@@ -9,17 +9,28 @@ repositories {
     mavenCentral()
 }
 
+
+val browserDistributionDir = projectDir.resolve("out/browser")
+val assembleBrowserTask = tasks.create<Copy>("assembleBrowserDistribution") {
+    group = "application"
+    dependsOn(tasks.named("browserBrowserWebpack"::equals))
+    from(projectDir.resolve("src/browserMain/static"))
+    into(browserDistributionDir)
+}
+
 kotlin {
     explicitApi()
     jvm()
     js("browser", IR) {
         browser {
-            commonWebpackConfig{
+            commonWebpackConfig {
                 outputFileName = "app.js"
+                outputPath = browserDistributionDir
             }
             webpackTask {
                 outputs.upToDateWhen { false }
             }
+
         }
         binaries.executable()
     }

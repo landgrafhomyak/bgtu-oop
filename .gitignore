@@ -3,8 +3,9 @@
 /gradle/
 build/
 /gradlew*
-/.kotlin
-/kotlin-js-store
+/.kotlin/
+/kotlin-js-store/
+/out/
 
 *.class
 *.js
