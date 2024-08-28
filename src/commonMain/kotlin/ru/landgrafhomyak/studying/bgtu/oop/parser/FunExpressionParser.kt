@@ -90,8 +90,12 @@ public object FunExpressionParser : Parser<ExpressionContextWithParameters> {
                                 }
 
                                 "-" -> {
-                                    if (top.args.size != 2) return null
-                                    compiled = SubExpression(top.args[0], top.args[1])
+                                    @Suppress("LiftReturnOrAssignment")
+                                    when (top.args.size) {
+                                        1 -> compiled = NegExpression(top.args[0])
+                                        2 -> compiled = SubExpression(top.args[0], top.args[1])
+                                        else -> return null
+                                    }
                                 }
 
                                 "*" -> {
