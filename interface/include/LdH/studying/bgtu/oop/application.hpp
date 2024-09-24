@@ -55,7 +55,7 @@ namespace LdH::Studying::BGTU::OOP::Interface {
             };
 
             virtual ApplicationCallbacks *create(
-                    CanvasProvider const *canvas,
+                    CanvasProvider *canvas,
                     ExpressionParser const *parser,
                     unsigned quality_steps_count,
                     view_area_settings initial_view_area,

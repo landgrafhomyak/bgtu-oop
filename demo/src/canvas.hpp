@@ -16,9 +16,7 @@ namespace LdH::Studying::BGTU::OOP::Demo {
                 PyObject *const signal
         ) : path_constructor{path_constructor}, signal{signal}, cw{0}, ch{0} {}
 
-    private:
-        void _reconfigure_no_catch(LdH::Studying::BGTU::OOP::Interface::CanvasInitializer *with) const;
     public:
-        void reconfigure(LdH::Studying::BGTU::OOP::Interface::CanvasInitializer *with) const final;
+        void reconfigure(double min_x, double max_x, double min_y, double max_y, Interface::CanvasLineArtist const * with) final;
     };
 }

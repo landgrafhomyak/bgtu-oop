@@ -27,165 +27,136 @@ namespace LdH::Studying::BGTU::OOP {
                 }
             };
 
-
-            class CanvasInitializerImpl final : public Interface::CanvasInitializer {
+            class LineArtistImpl final : public Interface::CanvasLineArtist {
             private:
-                class LineArtistImpl final : public Interface::CanvasLineArtist {
-                private:
-                    class ExpressionContextWithX final : Interface::ExpressionContext {
-                    public:
-                        double x;
-                    private:
-                        Interface::ExpressionContext const *const real;
-                    public:
-                        explicit ExpressionContextWithX(Interface::ExpressionContext const *real) : real{real} {}
-
-                        [[nodiscard]] double get_parameter(const std::string &name) const final {
-                            if (name == "x")
-                                return this->x;
-                            else
-                                return this->real->get_parameter(name);
-                        }
-                    };
-
-                    Interface::Expression const *const expr;
-                    Interface::ExpressionContext const *const in_ctx;
-                    double const x_start;
-                    double const x_end;
-                    unsigned steps_count;
-
-
+                class ExpressionContextWithX final : Interface::ExpressionContext {
                 public:
-                    LineArtistImpl(
-                            Interface::Expression const *const expr,
-                            Interface::ExpressionContext const *const in_ctx,
-                            const double x_start,
-                            const double x_end,
-                            unsigned int steps_count
-                    ) : expr{expr}, in_ctx{in_ctx}, x_start{x_start}, x_end{x_end}, steps_count{steps_count} {}
+                    double x;
+                private:
+                    Interface::ExpressionContext const *const real;
+                public:
+                    explicit ExpressionContextWithX(Interface::ExpressionContext const *real) : real{real} {}
 
-                    void draw_line(Interface::CanvasLinePointsCollector *collector) final {
-                        double step = (this->x_end - this->x_start) / this->steps_count;
-                        double x = this->x_start;
-                        ExpressionContextWithX ctx_x{this->in_ctx};
-
-                        for (; x <= this->x_end; x += step) {
-                            ctx_x.x = x;
-                            const double y = this->expr->calculate((Interface::ExpressionContext *) &ctx_x);
-                            collector->addPoint(x, y);
-                        }
+                    [[nodiscard]] double get_parameter(const std::string &name) const final {
+                        if (name == "x")
+                            return this->x;
+                        else
+                            return this->real->get_parameter(name);
                     }
                 };
 
-            public:
-                double x_center;
-                double x_radius;
-                double y_center;
-                double y_radius;
-                Interface::Expression const *expr;
-            private:
-                Interface::ExpressionContext *const ctx;
-                const unsigned steps_count;
-            public:
-                CanvasInitializerImpl(
-                        Interface::ApplicationCallbacks::ApplicationFactory::view_area_settings view_area_settings,
-                        Interface::ExpressionContext *ctx,
-                        unsigned steps_count
-                ) : x_center{(view_area_settings.max_x + view_area_settings.min_x) / 2},
-                    x_radius{(view_area_settings.max_x - view_area_settings.min_x) / 2},
-                    y_center{(view_area_settings.max_y + view_area_settings.min_y) / 2},
-                    y_radius{(view_area_settings.max_y - view_area_settings.min_y) / 2},
-                    expr{nullptr},
-                    ctx{ctx},
-                    steps_count{steps_count} {}
+                Interface::Expression const *const expr;
+                Interface::ExpressionContext const *const in_ctx;
+                double const x_start;
+                double const x_end;
+                unsigned steps_count;
 
-                void configure(Interface::CanvasConfiguration *config) final {
-                    double x_start = this->x_center - this->x_radius;
-                    double x_end = this->x_center + this->x_radius;
-                    config->set_view_area(
-                            x_start,
-                            x_end,
-                            this->y_center - this->y_radius,
-                            this->y_center + this->y_radius
-                    );
-                    if (this->expr != nullptr) {
-                        LineArtistImpl artist{
-                                this->expr,
-                                this->ctx,
-                                x_start,
-                                x_end,
-                                this->steps_count
-                        };
-                        config->draw_line(&artist);
+
+            public:
+                LineArtistImpl(
+                        Interface::Expression const *const expr,
+                        Interface::ExpressionContext const *const in_ctx,
+                        const double x_start,
+                        const double x_end,
+                        unsigned int steps_count
+                ) : expr{expr}, in_ctx{in_ctx}, x_start{x_start}, x_end{x_end}, steps_count{steps_count} {}
+
+                void draw_line(Interface::CanvasPlot *collector) const final {
+                    double step = (this->x_end - this->x_start) / this->steps_count;
+                    double x = this->x_start;
+                    ExpressionContextWithX ctx_x{this->in_ctx};
+
+                    for (; x <= this->x_end; x += step) {
+                        ctx_x.x = x;
+                        const double y = this->expr->calculate((Interface::ExpressionContext *) &ctx_x);
+                        collector->addPoint(x, y);
                     }
                 }
+            };
+
+            class NoopLineArtist final : public Interface::CanvasLineArtist {
+            private:
+                NoopLineArtist() = default;
+
+            public:
+                void draw_line(Interface::CanvasPlot *collector) const final {}
+
+                static const NoopLineArtist INSTANCE;
             };
 
 
             ExpressionContextImpl expr_ctx;
-            CanvasInitializerImpl cnv_init;
-            Interface::CanvasProvider const *canvas;
+            Interface::CanvasProvider *canvas;
             Interface::ExpressionParser const *parser;
             Interface::ApplicationCallbacks::ApplicationFactory::scroll_and_zoom_settings scroll_and_zoom_settings;
+            struct {
+                double x_center;
+                double x_radius;
+                double y_center;
+                double y_radius;
+            } view_area;
+            Interface::Expression *expr;
+            unsigned quality_steps_count;
 
             DefaultApplicationLogic(
-                    Interface::CanvasProvider const *canvas,
+                    Interface::CanvasProvider *canvas,
                     Interface::ExpressionParser const *parser,
-                    unsigned int quality_steps_count,
+                    unsigned quality_steps_count,
                     Interface::ApplicationCallbacks::ApplicationFactory::view_area_settings initial_view_area,
                     Interface::ApplicationCallbacks::ApplicationFactory::scroll_and_zoom_settings scroll_and_zoom_settings
-            ) : expr_ctx{}, cnv_init{initial_view_area, &this->expr_ctx, quality_steps_count}, canvas{canvas}, parser{parser}, scroll_and_zoom_settings{scroll_and_zoom_settings} {}
+            ) : expr_ctx{}, canvas{canvas}, parser{parser}, scroll_and_zoom_settings{scroll_and_zoom_settings}, view_area{
+                    .x_center = (initial_view_area.max_x + initial_view_area.min_x) / 2,
+                    .x_radius = (initial_view_area.max_x - initial_view_area.min_x) / 2,
+                    .y_center  = (initial_view_area.max_y + initial_view_area.min_y) / 2,
+                    .y_radius = (initial_view_area.max_y - initial_view_area.min_y) / 2,
+            }, quality_steps_count{quality_steps_count}, expr{nullptr} {}
 
 
             void redraw() {
-                this->canvas->reconfigure(&this->cnv_init);
+                LineArtistImpl artist{
+                        this->expr,
+                        &this->expr_ctx,
+                        this->view_area.x_center - this->view_area.x_radius,
+                        this->view_area.x_center + this->view_area.x_radius,
+                        this->quality_steps_count
+                };
+
+                this->canvas->reconfigure(
+                        this->view_area.x_center - this->view_area.x_radius,
+                        this->view_area.x_center + this->view_area.x_radius,
+                        this->view_area.y_center - this->view_area.y_radius,
+                        this->view_area.y_center + this->view_area.y_radius,
+                         (this->expr == nullptr ? (Interface::CanvasLineArtist const *) &NoopLineArtist::INSTANCE : &artist)
+                );
             }
 
         public:
-            class Factory final : public Interface::ApplicationCallbacks::ApplicationFactory {
-            public:
-                Factory() = default;
-
-
-                Interface::ApplicationCallbacks *create(
-                        Interface::CanvasProvider const *canvas,
-                        Interface::ExpressionParser const *parser,
-                        unsigned int quality_steps_count,
-                        Interface::ApplicationCallbacks::ApplicationFactory::view_area_settings initial_view_area,
-                        Interface::ApplicationCallbacks::ApplicationFactory::scroll_and_zoom_settings scroll_and_zoom_settings
-                ) const final {
-                    return (Interface::ApplicationCallbacks *) (new DefaultApplicationLogic{
-                            canvas, parser, quality_steps_count, initial_view_area, scroll_and_zoom_settings
-                    });
-                }
-            };
-
             void scrollX(signed steps) final {
-                this->cnv_init.x_center += this->cnv_init.x_radius * steps * this->scroll_and_zoom_settings.scroll_x_step;
+                this->view_area.x_center += this->view_area.x_radius * steps * this->scroll_and_zoom_settings.scroll_x_step;
                 this->redraw();
             }
 
             void scrollY(signed steps) final {
-                this->cnv_init.y_center += this->cnv_init.y_radius * steps * this->scroll_and_zoom_settings.scroll_y_step;
+                this->view_area.y_center += this->view_area.y_radius * steps * this->scroll_and_zoom_settings.scroll_y_step;
                 this->redraw();
             }
 
             void zoomX(signed steps) final {
-                this->cnv_init.x_radius /= std::pow(this->scroll_and_zoom_settings.zoom_x_step, steps);
+                this->view_area.x_radius /= std::pow(this->scroll_and_zoom_settings.zoom_x_step, steps);
                 this->redraw();
 
             }
 
             void zoomY(signed steps) final {
-                this->cnv_init.y_radius /= std::pow(this->scroll_and_zoom_settings.zoom_y_step, steps);
+                this->view_area.y_radius /= std::pow(this->scroll_and_zoom_settings.zoom_y_step, steps);
                 this->redraw();
             }
 
             void inputExpression(const char *raw) final {
                 try {
-                    this->cnv_init.expr = this->parser->parse(raw);
+                    this->expr = this->parser->parse(raw);
                 } catch (std::exception &) {
-                    this->cnv_init.expr = nullptr;
+                    this->expr = nullptr;
                     this->redraw();
                     throw;
                 }
@@ -207,7 +178,28 @@ namespace LdH::Studying::BGTU::OOP {
 //                this->cnv_init.~CanvasInitializerImpl();
                 operator delete(this);
             }
+
+            class Factory final : public Interface::ApplicationCallbacks::ApplicationFactory {
+            public:
+                Factory() = default;
+
+
+                Interface::ApplicationCallbacks *create(
+                        Interface::CanvasProvider *canvas,
+                        Interface::ExpressionParser const *parser,
+                        unsigned int quality_steps_count,
+                        Interface::ApplicationCallbacks::ApplicationFactory::view_area_settings initial_view_area,
+                        Interface::ApplicationCallbacks::ApplicationFactory::scroll_and_zoom_settings scroll_and_zoom_settings
+                ) const final {
+                    return (Interface::ApplicationCallbacks *) (new DefaultApplicationLogic{
+                            canvas, parser, quality_steps_count, initial_view_area, scroll_and_zoom_settings
+                    });
+                }
+            };
         };
+
+
+        const DefaultApplicationLogic::NoopLineArtist DefaultApplicationLogic::NoopLineArtist::INSTANCE{};
 
         static DefaultApplicationLogic::Factory const _default_application_logic{};
     }
